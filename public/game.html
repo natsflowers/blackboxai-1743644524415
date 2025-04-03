@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Sandbox | Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .game-bg {
+            background-color: #F0F9FF;
+        }
+        .game-card {
+            background-color: white;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .game-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .chaos-overlay {
+            background-color: rgba(239, 68, 68, 0.2);
+            backdrop-filter: blur(4px);
+        }
+        .response-btn {
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+            text-align: left;
+        }
+        .response-btn:hover {
+            background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        .timer-display {
+            color: #F59E0B;
+            font-weight: bold;
+        }
+        .score-display {
+            color: #6366F1;
+            font-weight: bold;
+        }
+        .ar-container {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+    </style>
+</head>
+<body class="game-bg min-h-screen p-4 flex items-center justify-center">
+    <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Sidebar - Multiplayer Panel -->
+        <div class="lg:col-span-1">
+            <div class="game-card p-4 rounded-lg sticky top-4">
+                <h3 class="text-lg font-semibold mb-3 text-indigo-600">Active Players</h3>
+                <div id="user-list" class="space-y-2">
+                    <!-- Users will be added dynamically -->
+                </div>
+                
+                <div class="mt-6">
+                <h3 class="text-lg font-semibold mb-3 text-indigo-600">Leaderboard</h3>
+                    <div id="leaderboard" class="space-y-2">
+                        <!-- Leaderboard entries will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="lg:col-span-2">
+            <!-- Scenario Card -->
+            <div class="game-card p-6 rounded-lg mb-4">
+                <h2 id="scenario-title" class="text-2xl font-playfair mb-4 text-gray-800">Scenario: Team Conflict</h2>
+                <p id="scenario-description" class="text-gray-600 mb-6">
+                    During a team meeting, one member strongly disagrees with your proposal 
+                    and becomes confrontational. Other team members are watching nervously.
+                </p>
+                
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-indigo-600">How would you respond?</h3>
+                    <div id="response-options" class="grid grid-cols-1 gap-3">
+                        <button class="response-btn py-3 px-4 rounded-lg">
+                            "I understand your concerns. Let's discuss alternatives."
+                        </button>
+                        <button class="response-btn py-3 px-4 rounded-lg">
+                            "This is the best approach. We should proceed as planned."
+                        </button>
+                        <button class="response-btn py-3 px-4 rounded-lg">
+                            "Let's take a break and revisit this later."
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer and Score -->
+            <div class="game-card p-4 rounded-lg flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="text-amber-500 mr-2">⏱️</span>
+                    <span id="timer" class="timer-display">1:45</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-indigo-500 mr-2">⭐</span>
+                    <span id="score" class="score-display">85 Adaptability</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chaos Overlay (hidden by default) -->
+    <div id="chaos-overlay" class="chaos-overlay hidden fixed inset-0 flex items-center justify-center">
+        <div class="game-card p-8 max-w-md mx-4 text-center">
+            <h2 class="text-3xl font-playfair mb-4 text-red-600">CHAOS EVENT!</h2>
+            <p id="chaos-event-text" class="text-xl mb-6 text-gray-600">
+                The CEO unexpectedly joins the meeting and asks for your opinion!
+            </p>
+            <button id="continue-btn" class="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white py-2 px-6 rounded-lg">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- AR Container (hidden by default) -->
+    <div id="ar-container" class="ar-container hidden fixed inset-0 z-50 flex items-center justify-center">
+        <div class="game-card p-6 max-w-2xl w-full">
+            <h2 id="ar-scenario-title" class="text-2xl font-playfair mb-4 text-white"></h2>
+            <p id="ar-scenario-prompt" class="mb-6 text-gray-300"></p>
+            <div id="ar-response-options" class="space-y-3"></div>
+            <button id="exit-ar" class="mt-6 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white py-2 px-6 rounded-lg">
+                Exit AR Mode
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        let currentUser = null;
+
+        // Authentication
+        function authenticate(username) {
+            fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            })
+            .then(res => res.json())
+            .then(data => {
+                socket.emit('authenticate', data.token);
+                currentUser = username;
+            });
+        }
+
+        // Prompt for username if not authenticated
+        if (!currentUser) {
+            const username = prompt('Enter your username:');
+            if (username) authenticate(username);
+        }
+
+        // Socket event listeners
+        socket.on('user-connected', (user) => {
+            addUserToPanel(user.username);
+        });
+
+        socket.on('user-disconnected', (user) => {
+            removeUserFromPanel(user.username);
+        });
+
+        socket.on('points-update', (data) => {
+            updateLeaderboard(data.username, data.points);
+            if (data.username === currentUser) {
+                document.getElementById('score').textContent = `${data.points} ${data.skill}`;
+            }
+        });
+
+        socket.on('chaos-event', (event) => {
+            document.getElementById('chaos-event-text').textContent = event.event;
+            document.getElementById('chaos-overlay').classList.remove('hidden');
+        });
+
+        socket.on('ar-scene-data', (scenario) => {
+            document.getElementById('ar-scenario-title').textContent = scenario.title;
+            document.getElementById('ar-scenario-prompt').textContent = scenario.scenes[0].prompt;
+            document.getElementById('ar-container').classList.remove('hidden');
+        });
+
+        // UI Helper Functions
+        function addUserToPanel(username) {
+            const userElement = document.createElement('div');
+            userElement.className = 'flex items-center space-x-2';
+            userElement.id = `user-${username}`;
+            userElement.innerHTML = `
+                <div class="user-avatar">${username.charAt(0).toUpperCase()}</div>
+                <span>${username}</span>
+            `;
+            document.getElementById('user-list').appendChild(userElement);
+        }
+
+        function removeUserFromPanel(username) {
+            const element = document.getElementById(`user-${username}`);
+            if (element) element.remove();
+        }
+
+        function updateLeaderboard(username, points) {
+            // Implementation would update or add the user to the leaderboard
+        }
+
+        // Event Listeners
+        document.getElementById('continue-btn').addEventListener('click', () => {
+            document.getElementById('chaos-overlay').classList.add('hidden');
+        });
+
+        document.getElementById('exit-ar').addEventListener('click', () => {
+            document.getElementById('ar-container').classList.add('hidden');
+        });
+
+        // Initialize with demo users for testing
+        ['Alex', 'Jamie', 'Taylor'].forEach(user => addUserToPanel(user));
+    </script>
+</body>
+</html>
