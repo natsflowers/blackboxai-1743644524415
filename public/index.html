@@ -3,238 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Sandbox | AI-Powered Social Skills Training</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>The Social Sandbox - AI-Powered Social Growth Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sandbox-red': '#FF4B4B',
+                        'sandbox-yellow': '#FFD93D',
+                        'sandbox-blue': '#4B7BFF',
+                        'sandbox-green': '#4BC97F'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        .hero-bg {
-            background-color: #F0F9FF;
-            background-image: url('https://images.pexels.com/photos/3761509/pexels-photo-3761509.jpeg');
-            background-blend-mode: overlay;
-            background-size: cover;
-            background-position: center;
+        body {
+            font-family: 'Poppins', sans-serif;
         }
-        .feature-card {
-            background-color: white;
-            border: 1px solid #E0E7FF;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-radius: 12px;
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
         }
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
+        .puzzle-piece {
+            aspect-ratio: 1;
+            border-radius: 20%;
+            position: relative;
+            transition: transform 0.3s;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
-            color: white;
-            transition: all 0.3s ease;
-            border: none;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .btn-secondary {
-            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
-            color: white;
-            transition: all 0.3s ease;
-            border: none;
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+        .puzzle-piece:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50">
-    <!-- Hero Section -->
-    <section class="hero-bg min-h-screen flex items-center justify-center p-6">
-        <div class="max-w-4xl text-center">
-            <h1 class="text-4xl md:text-6xl font-playfair mb-6 text-indigo-600">Social Sandbox</h1>
-            <p class="text-xl md:text-2xl mb-8 text-gray-600">
-                Master social skills through AI-powered role-playing and chaos challenges
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/game" class="btn-primary py-3 px-8 rounded-lg text-lg font-semibold">
-                    Start Training
-                </a>
-                <a href="#features" class="btn-secondary py-3 px-8 rounded-lg text-lg font-semibold">
-                    Learn More
-                </a>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="puzzle-grid w-10 h-10">
+                        <div class="puzzle-piece bg-sandbox-red"></div>
+                        <div class="puzzle-piece bg-sandbox-yellow"></div>
+                        <div class="puzzle-piece bg-sandbox-blue"></div>
+                        <div class="puzzle-piece bg-sandbox-green"></div>
+                    </div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-sandbox-blue via-sandbox-green to-sandbox-red bg-clip-text text-transparent">The Social Sandbox</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-sandbox-blue">Features</a>
+                    <a href="#technology" class="text-gray-700 hover:text-sandbox-green">Technology</a>
+                    <a href="#business" class="text-gray-700 hover:text-sandbox-red">Business Model</a>
+                    <a href="#" class="bg-sandbox-blue text-white px-6 py-2 rounded-full hover:bg-blue-600 transition">Get Started</a>
+                </div>
             </div>
         </div>
-    </section>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-8">
+                    <span class="bg-gradient-to-r from-sandbox-blue via-sandbox-green to-sandbox-red bg-clip-text text-transparent">
+                        Level Up Your Social Skills with AI
+                    </span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+                    An interactive mobile game designed to develop social skills through AI-powered role-playing scenarios and chaos challenges.
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#" class="bg-sandbox-blue text-white px-8 py-3 rounded-full text-lg hover:bg-blue-600 transition">
+                        Start Playing
+                    </a>
+                    <a href="#" class="bg-white text-sandbox-blue px-8 py-3 rounded-full text-lg border-2 border-sandbox-blue hover:bg-blue-50 transition">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Features Section -->
-    <section id="features" class="py-16 px-6 bg-indigo-50">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair text-center mb-12 text-indigo-600">Why Social Sandbox?</h2>
-            
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-16 bg-gradient-to-r from-sandbox-blue to-sandbox-green bg-clip-text text-transparent">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-sandbox-blue">
+                    <i class="fas fa-robot text-4xl text-sandbox-blue mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-blue">AI-Powered Interactions</h3>
+                    <p class="text-gray-600">Personalized dialogue and consequences based on your choices and learning style.</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-sandbox-yellow">
+                    <i class="fas fa-random text-4xl text-sandbox-yellow mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-yellow">Chaos Challenges</h3>
+                    <p class="text-gray-600">Random social disruptions that test your adaptability and quick thinking.</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100 border-2 border-sandbox-green">
+                    <i class="fas fa-trophy text-4xl text-sandbox-green mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-green">Gamification</h3>
+                    <p class="text-gray-600">Earn points, unlock levels, and track your social skills progress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-16 bg-gradient-to-r from-sandbox-red to-sandbox-blue bg-clip-text text-transparent">Powered by Advanced Technology</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-sandbox-blue">
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-blue">AI & Machine Learning</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-green mr-3"></i>
+                            <span>Adaptive social interaction responses</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-green mr-3"></i>
+                            <span>Real-time personality analysis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-green mr-3"></i>
+                            <span>Dynamic scenario generation</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-sandbox-green">
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-green">Multiplayer & Cloud</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-blue mr-3"></i>
+                            <span>Real-time collaboration</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-blue mr-3"></i>
+                            <span>Cross-platform compatibility</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sandbox-blue mr-3"></i>
+                            <span>Cloud-based progress tracking</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section id="business" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-16 bg-gradient-to-r from-sandbox-yellow to-sandbox-red bg-clip-text text-transparent">Business Solutions</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="feature-card p-6 rounded-lg text-center hover:shadow-lg transition-all">
-                    <div class="feature-icon">
-                        <span class="text-2xl">🤖</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3 text-gray-800">AI-Powered Scenarios</h3>
-                    <p class="text-gray-600">
-                        Experience realistic social interactions with adaptive AI that responds to your choices.
-                    </p>
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-xl border-2 border-sandbox-blue">
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-blue">Education</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-graduation-cap text-sandbox-blue mr-3"></i>
+                            <span>School licensing packages</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chart-line text-sandbox-blue mr-3"></i>
+                            <span>Progress tracking</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-users text-sandbox-blue mr-3"></i>
+                            <span>Group activities</span>
+                        </li>
+                    </ul>
                 </div>
-
-                <!-- Feature 2 -->
-                <div class="kraft-card p-6 rounded-lg text-center">
-                    <div class="feature-icon">
-                        <span class="text-2xl">🌀</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Chaos Challenges</h3>
-                    <p class="text-gray-700">
-                        Develop quick thinking with unexpected social disruptions that test your adaptability.
-                    </p>
+                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-8 rounded-xl border-2 border-sandbox-yellow">
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-yellow">Corporate</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-briefcase text-sandbox-yellow mr-3"></i>
+                            <span>Team building workshops</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-handshake text-sandbox-yellow mr-3"></i>
+                            <span>Leadership training</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chart-bar text-sandbox-yellow mr-3"></i>
+                            <span>Skills assessment</span>
+                        </li>
+                    </ul>
                 </div>
-
-                <!-- Feature 3 -->
-                <div class="kraft-card p-6 rounded-lg text-center">
-                    <div class="feature-icon">
-                        <span class="text-2xl">👥</span>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Multiplayer Mode</h3>
-                    <p class="text-gray-700">
-                        Practice with friends or colleagues in collaborative and competitive scenarios.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="py-16 px-6 bg-white">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-playfair text-center mb-12 text-indigo-600">How It Works</h2>
-            
-            <div class="space-y-8">
-                <!-- Step 1 -->
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                    <div class="step-number">1</div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Choose Your Scenario</h3>
-                        <p class="text-gray-600">
-                            Select from various social situations like job interviews, team meetings, or networking events.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                    <div class="text-4xl font-playfair text-[#FFD700]">2</div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Navigate the Interaction</h3>
-                        <p class="text-gray-700">
-                            Make choices and respond to challenges as they unfold in realistic simulations.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                    <div class="text-4xl font-playfair text-[#FFD700]">3</div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Learn and Improve</h3>
-                        <p class="text-gray-700">
-                            Receive feedback on your performance and track your progress over time.
-                        </p>
-                    </div>
+                <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-xl border-2 border-sandbox-green">
+                    <h3 class="text-xl font-semibold mb-4 text-sandbox-green">Individual</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-user text-sandbox-green mr-3"></i>
+                            <span>Personal development</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-star text-sandbox-green mr-3"></i>
+                            <span>Premium features</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-mobile-alt text-sandbox-green mr-3"></i>
+                            <span>Mobile access</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="py-16 px-6 bg-indigo-50">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-playfair text-center mb-12 text-indigo-600">What Our Users Say</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="feature-card p-6 rounded-lg hover:shadow-lg transition-all">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mr-4">
-                            <span class="text-lg text-white">👩‍💼</span>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800">Sarah K.</h4>
-                            <p class="text-sm text-gray-500">College Student</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600">
-                        "The chaos challenges helped me stay calm during my actual job interview when unexpected questions came up!"
-                    </p>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="kraft-card p-6 rounded-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-[#FFD700] flex items-center justify-center mr-4">
-                            <span class="text-lg">👨‍💻</span>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">Michael T.</h4>
-                            <p class="text-sm text-gray-600">Software Engineer</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-700">
-                        "I've improved my team communication skills significantly after just a few weeks of using Social Sandbox."
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="py-16 px-6 bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-playfair mb-6">Ready to Boost Your Social Skills?</h2>
-            <p class="text-xl mb-8 opacity-90">
-                Join thousands of users improving their communication, leadership, and adaptability.
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-sandbox-blue via-sandbox-green to-sandbox-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-8">Ready to Transform Your Social Skills?</h2>
+            <p class="text-xl text-white mb-12 max-w-3xl mx-auto">
+                Join thousands of users who are already improving their social intelligence through gamified learning.
             </p>
-            <a href="/game" class="btn-secondary py-3 px-8 rounded-lg text-lg font-semibold inline-block">
-                Start Your Journey Now
+            <a href="#" class="bg-white text-sandbox-blue px-8 py-3 rounded-full text-lg hover:bg-blue-50 transition inline-block">
+                Get Started Now
             </a>
         </div>
     </section>
 
-    <script>
-        // Simple authentication check
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                // Change "Start Training" to "Continue Training" if logged in
-                const startBtn = document.querySelector('a[href="/game"]');
-                if (startBtn) {
-                    startBtn.textContent = 'Continue Training';
-                }
-            }
-        });
-    </script>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="puzzle-grid w-8 h-8">
+                            <div class="puzzle-piece bg-sandbox-red"></div>
+                            <div class="puzzle-piece bg-sandbox-yellow"></div>
+                            <div class="puzzle-piece bg-sandbox-blue"></div>
+                            <div class="puzzle-piece bg-sandbox-green"></div>
+                        </div>
+                        <h3 class="text-xl font-semibold">The Social Sandbox</h3>
+                    </div>
+                    <p class="text-gray-400">AI-powered social skills development through gaming.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Features</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>AI Interactions</li>
+                        <li>Chaos Challenges</li>
+                        <li>Progress Tracking</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Solutions</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Education</li>
+                        <li>Corporate</li>
+                        <li>Individual</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-sandbox-blue">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-sandbox-blue">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-sandbox-green">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 The Social Sandbox. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
