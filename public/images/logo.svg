@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Puzzle piece container -->
+  <g transform="translate(20,20)">
+    <!-- Puzzle piece background -->
+    <rect x="0" y="0" width="160" height="160" rx="15" fill="#333333"/>
+    <!-- Puzzle sections -->
+    <path d="M 10 10 L 75 10 L 75 75 L 10 75 Z" fill="#FFD93D"/> <!-- Yellow -->
+    <path d="M 85 10 L 150 10 L 150 75 L 85 75 Z" fill="#4B7BFF"/> <!-- Blue -->
+    <path d="M 10 85 L 75 85 L 75 150 L 10 150 Z" fill="#4BC97F"/> <!-- Green -->
+    <path d="M 85 85 L 150 85 L 150 150 L 85 150 Z" fill="#FF4B4B"/> <!-- Red -->
+    <!-- Puzzle connectors -->
+    <circle cx="80" cy="42.5" r="10" fill="#FF4B4B"/>
+    <circle cx="42.5" cy="80" r="10" fill="#4B7BFF"/>
+  </g>
+  <!-- Text -->
+  <g transform="translate(200,110)">
+    <text font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#333333">
+      <tspan>The Social</tspan>
+    </text>
+  </g>
+  <g transform="translate(200,180)">
+    <text font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#D4AF37">
+      <tspan>Sandbox</tspan>
+    </text>
+  </g>
+</svg>
