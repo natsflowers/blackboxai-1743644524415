@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Sandbox | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .dashboard-bg {
+            background-color: #F0F9FF;
+        }
+        .dashboard-card {
+            background-color: white;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .skill-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #E0E7FF;
+        }
+        .skill-progress {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 100%);
+            transition: width 0.5s ease;
+        }
+        .xp-badge {
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            color: white;
+        }
+        .continue-btn {
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .continue-btn:hover {
+            background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="dashboard-bg min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-playfair text-indigo-600">Your Progress Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <span id="total-xp" class="xp-badge py-1 px-3 rounded-full font-bold">1000 XP</span>
+                <a href="/game" class="continue-btn py-2 px-4 rounded-lg">
+                    Continue Training
+                </a>
+            </div>
+        </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Skills Overview -->
+            <div class="dashboard-card p-6 lg:col-span-2">
+                <h2 class="text-2xl font-playfair mb-6 text-indigo-600">Skill Development</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold text-gray-800">Adaptability</span>
+                            <span class="text-indigo-600">85/100</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Communication</span>
+                            <span class="text-[#8B4513]">72/100</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 72%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Leadership</span>
+                            <span class="text-[#8B4513]">65/100</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 65%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Teamwork</span>
+                            <span class="text-[#8B4513]">78/100</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-card p-6">
+                <h2 class="text-2xl font-playfair mb-6 text-indigo-600">Recent Activity</h2>
+                
+                <div class="space-y-4">
+                    <div class="border-b border-indigo-100 pb-3">
+                        <p class="font-semibold text-gray-800">Completed: Team Conflict Scenario</p>
+                        <p class="text-sm text-green-600">+25 Adaptability XP</p>
+                    </div>
+                    <div class="border-b border-indigo-100 pb-3">
+                        <p class="font-semibold text-gray-800">Purchased: AR Scenarios Pack</p>
+                        <p class="text-sm text-rose-600">-800 XP</p>
+                    </div>
+                    <div class="border-b border-indigo-100 pb-3">
+                        <p class="font-semibold text-gray-800">Completed: Networking Event</p>
+                        <p class="text-sm text-green-600">+30 Communication XP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Chart -->
+        <div class="dashboard-card p-6 mt-6">
+            <h2 class="text-2xl font-playfair mb-6 text-indigo-600">Progress Over Time</h2>
+            <canvas id="progressChart" height="300"></canvas>
+        </div>
+
+        <!-- Achievements -->
+        <div class="dashboard-card p-6 mt-6">
+            <h2 class="text-2xl font-playfair mb-6 text-indigo-600">Your Achievements</h2>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-indigo-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-2xl text-white">🏆</span>
+                    </div>
+                    <p class="text-sm font-semibold text-gray-800">First Scenario</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-2xl text-white">💬</span>
+                    </div>
+                    <p class="text-sm font-semibold text-gray-800">Communicator</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-amber-500 to-yellow-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-2xl text-white">🧠</span>
+                    </div>
+                    <p class="text-sm font-semibold text-gray-800">Quick Thinker</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-2xl text-gray-500">🌟</span>
+                    </div>
+                    <p class="text-sm font-semibold text-gray-500">Master Adaptor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let currentUser = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupChart();
+            loadUserData();
+        });
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+            
+            try {
+                // In a real app, we would verify the token with the server
+                currentUser = JSON.parse(atob(token.split('.')[1])).username;
+            } catch (e) {
+                window.location.href = '/';
+            }
+        }
+
+        // Setup progress chart
+        function setupChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [
+                        {
+                            label: 'Adaptability',
+                            data: [30, 45, 60, 65, 75, 85],
+                            borderColor: '#6366F1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Communication',
+                            data: [25, 40, 50, 55, 65, 72],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Leadership',
+                            data: [20, 30, 40, 50, 55, 65],
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load user data
+        function loadUserData() {
+            // In a real app, this would fetch from the server
+            // For demo, we'll use mock data
+            document.getElementById('total-xp').textContent = '1000 XP';
+        }
+    </script>
+</body>
+</html>
