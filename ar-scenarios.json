@@ -1,0 +1,51 @@
+[
+    {
+        "id": "ar001",
+        "title": "Job Interview Simulation",
+        "description": "Practice your interview skills in a virtual office environment",
+        "category": "professional",
+        "difficulty": "medium",
+        "duration": 10,
+        "requiredEquipment": ["ARKit", "ARCore"],
+        "scenes": [
+            {
+                "trigger": "introduction",
+                "prompt": "The interviewer asks: 'Tell me about yourself'",
+                "idealResponses": [
+                    "Concise professional summary",
+                    "Relevant experience highlights",
+                    "Career objectives"
+                ]
+            },
+            {
+                "trigger": "technical",
+                "prompt": "They ask about a challenging project you worked on",
+                "idealResponses": [
+                    "STAR method response",
+                    "Technical details",
+                    "Lessons learned"
+                ]
+            }
+        ]
+    },
+    {
+        "id": "ar002",
+        "title": "Networking Event",
+        "description": "Practice introducing yourself and making connections",
+        "category": "social",
+        "difficulty": "easy",
+        "duration": 8,
+        "requiredEquipment": ["ARKit", "ARCore"],
+        "scenes": [
+            {
+                "trigger": "introduction",
+                "prompt": "A colleague approaches and introduces themselves",
+                "idealResponses": [
+                    "Polite greeting",
+                    "Reciprocal introduction",
+                    "Finding common ground"
+                ]
+            }
+        ]
+    }
+]
