@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Sandbox | Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .store-bg {
+            background-color: #F0F9FF;
+        }
+        .store-card {
+            background-color: white;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .inventory-item {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366F1;
+        }
+        .purchase-btn {
+            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .purchase-btn:hover {
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .refresh-btn {
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .refresh-btn:hover {
+            background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .modal-btn-cancel {
+            background: #E0E7FF;
+            color: #4F46E5;
+            transition: all 0.3s ease;
+        }
+        .modal-btn-cancel:hover {
+            background: #C7D2FE;
+        }
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .modal-btn-confirm:hover {
+            background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="store-bg min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-playfair mb-8 text-center text-indigo-600">Social Sandbox Store</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Premium Content -->
+            <div class="store-card product-card p-6 rounded-lg">
+                <img src="https://images.pexels.com/photos/3761509/pexels-photo-3761509.jpeg" class="w-full h-48 object-cover mb-4 rounded">
+                <h3 class="text-xl font-semibold mb-2 text-gray-800">Premium Mentor</h3>
+                <p class="text-gray-600 mb-4">Get advanced AI guidance with personalized feedback</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold text-indigo-600">500 XP</span>
+                    <button class="purchase-btn py-2 px-4 rounded-lg" data-id="mentor" data-cost="500">
+                        Unlock
+                    </button>
+                </div>
+            </div>
+
+            <!-- AR Scenarios -->
+            <div class="kraft-card product-card p-6 rounded-lg">
+                <img src="https://images.pexels.com/photos/3761509/pexels-photo-3761509.jpeg" class="w-full h-48 object-cover mb-4 rounded">
+                <h3 class="text-xl font-semibold mb-2">AR Scenarios Pack</h3>
+                <p class="text-gray-700 mb-4">10 additional AR scenarios for immersive training</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold">800 XP</span>
+                    <button class="bg-[#FFD700] hover:bg-[#FFB600] text-[#333] py-2 px-4 rounded-lg purchase-btn" data-id="ar-pack" data-cost="800">
+                        Unlock
+                    </button>
+                </div>
+            </div>
+
+            <!-- Custom Avatars -->
+            <div class="kraft-card product-card p-6 rounded-lg">
+                <img src="https://images.pexels.com/photos/3761509/pexels-photo-3761509.jpeg" class="w-full h-48 object-cover mb-4 rounded">
+                <h3 class="text-xl font-semibold mb-2">Avatar Customization</h3>
+                <p class="text-gray-700 mb-4">Customize your in-game avatar appearance</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold">300 XP</span>
+                    <button class="bg-[#FFD700] hover:bg-[#FFB600] text-[#333] py-2 px-4 rounded-lg purchase-btn" data-id="avatar" data-cost="300">
+                        Unlock
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 store-card p-6">
+            <h2 class="text-2xl font-playfair mb-4 text-indigo-600">Your Inventory</h2>
+            <div id="inventory" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Purchased items will appear here -->
+                <div class="text-center py-4">
+                    <p class="text-gray-600">No items purchased yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- XP Balance -->
+        <div class="mt-6 store-card p-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-indigo-500 mr-2">⭐</span>
+                <span id="xp-balance" class="text-indigo-600 font-bold">Loading XP...</span>
+            </div>
+            <button id="refresh-btn" class="refresh-btn py-1 px-3 rounded-lg">
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Purchase Confirmation Modal -->
+        <div id="purchase-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="store-card p-6 max-w-md w-full">
+            <h3 id="modal-title" class="text-xl font-semibold mb-4 text-gray-800"></h3>
+            <p id="modal-message" class="mb-6 text-gray-600"></p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-purchase" class="modal-btn-cancel py-2 px-4 rounded-lg">
+                    Cancel
+                </button>
+                <button id="confirm-purchase" class="modal-btn-confirm py-2 px-4 rounded-lg">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let currentUser = null;
+        let userXP = 0;
+        let inventory = [];
+        let pendingPurchase = null;
+
+        // Initialize store
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupEventListeners();
+            loadUserData();
+        });
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+            
+            try {
+                // In a real app, we would verify the token with the server
+                currentUser = JSON.parse(atob(token.split('.')[1])).username;
+            } catch (e) {
+                window.location.href = '/';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Purchase buttons
+            document.querySelectorAll('.purchase-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const productId = e.target.dataset.id;
+                    const productCost = parseInt(e.target.dataset.cost);
+                    const productName = e.target.closest('.kraft-card').querySelector('h3').textContent;
+                    
+                    showPurchaseModal(productId, productName, productCost);
+                });
+            });
+
+            // Modal buttons
+            document.getElementById('cancel-purchase').addEventListener('click', () => {
+                document.getElementById('purchase-modal').classList.add('hidden');
+            });
+
+            document.getElementById('confirm-purchase').addEventListener('click', completePurchase);
+
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', loadUserData);
+        }
+
+        // Show purchase confirmation modal
+        function showPurchaseModal(productId, productName, productCost) {
+            pendingPurchase = { productId, productCost };
+            
+            document.getElementById('modal-title').textContent = `Purchase ${productName}`;
+            document.getElementById('modal-message').textContent = 
+                `This will cost ${productCost} XP. Your current balance is ${userXP} XP.`;
+            
+            document.getElementById('purchase-modal').classList.remove('hidden');
+        }
+
+        // Complete purchase process
+        function completePurchase() {
+            if (!pendingPurchase || userXP < pendingPurchase.productCost) {
+                alert('Not enough XP for this purchase!');
+                document.getElementById('purchase-modal').classList.add('hidden');
+                return;
+            }
+
+            // In a real app, this would call the server to process the purchase
+            // For demo purposes, we'll simulate it
+            userXP -= pendingPurchase.productCost;
+            inventory.push(pendingPurchase.productId);
+            
+            updateXPDisplay();
+            updateInventory();
+            document.getElementById('purchase-modal').classList.add('hidden');
+            
+            // Show success message
+            alert('Purchase successful! The item has been added to your inventory.');
+        }
+
+        // Load user data (XP and inventory)
+        function loadUserData() {
+            // In a real app, this would fetch from the server
+            // For demo, we'll use mock data
+            userXP = 1000; // Mock XP balance
+            inventory = []; // Mock empty inventory
+            
+            updateXPDisplay();
+            updateInventory();
+        }
+
+        // Update XP display
+        function updateXPDisplay() {
+            document.getElementById('xp-balance').textContent = `${userXP} XP`;
+        }
+
+        // Update inventory display
+        function updateInventory() {
+            const inventoryEl = document.getElementById('inventory');
+            
+            if (inventory.length === 0) {
+                inventoryEl.innerHTML = `
+                    <div class="text-center py-4">
+                        <p class="text-gray-600">No items purchased yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            inventoryEl.innerHTML = inventory.map(item => `
+                <div class="inventory-item p-4 rounded">
+                    <h4 class="font-semibold capitalize">${item.replace('-', ' ')}</h4>
+                    <p class="text-sm text-gray-600 mt-1">Unlocked</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
